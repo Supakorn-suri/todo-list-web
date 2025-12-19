@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import { createTheme, MantineProvider } from "@mantine/core";
-
+import { ModalsProvider } from "@mantine/modals";
 import "@mantine/core/styles.css";
 
 const geistSans = Geist({
@@ -20,7 +20,33 @@ export const metadata: Metadata = {
 };
 
 const theme = createTheme({
-  /** Put your mantine theme override here */
+  defaultRadius: "md",
+  components: {
+    Modal: {
+      defaultProps: {
+        size: "lg",
+        centered: true,
+      },
+      styles: {
+        content: {
+          backgroundColor: "#111111",
+          border: "1px solid #1A202A",
+        },
+        header: {
+          color: "white",
+          borderBottom: "1px solid #333",
+          backgroundColor: "#111111",
+        },
+        title: {
+          fontSize: "20px",
+          fontWeight: 600,
+        },
+        body: {
+          padding: "16px",
+        },
+      },
+    },
+  },
 });
 
 export default function RootLayout({
@@ -31,7 +57,9 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={`${geistSans.variable} ${geistMono.variable}`}>
-        <MantineProvider theme={theme}>{children}</MantineProvider>
+        <MantineProvider theme={theme}>
+          <ModalsProvider>{children}</ModalsProvider>
+        </MantineProvider>
       </body>
     </html>
   );

@@ -9,23 +9,39 @@ import {
   Title,
 } from "@mantine/core";
 import { IconTrash, IconEdit, IconCircleFilled } from "@tabler/icons-react";
+import { modals } from "@mantine/modals";
 
-interface NoteCardProps extends CardProps {
-  id: string | number;
-  title: string;
-  content: string;
-  completed: boolean;
+import { Todo } from "@/api/todoApi";
+
+interface TodoCardProps extends CardProps {
+  todo: Todo;
   onCompletedChange?: (checked: boolean) => void;
+  onClickCard?: () => void;
 }
 
-export const NoteCard = ({
-  id,
-  title,
-  content,
-  completed,
+export const TodoCard = ({
+  todo,
   onCompletedChange,
+  onClickCard,
   ...rest
-}: NoteCardProps) => {
+}: TodoCardProps) => {
+  const { id, title, content, completed } = todo;
+
+  const openedDeleteModal = () =>
+    modals.openConfirmModal({
+      size: "md",
+      title: "Please confirm your action",
+      children: (
+        <Text size="md" c="white">
+          Are you sure you want to delete this todo?
+        </Text>
+      ),
+      labels: { confirm: "Confirm", cancel: "Cancel" },
+      confirmProps: { color: "red" },
+      cancelProps: { color: "gray", variant: "outline" },
+      onCancel: () => console.log("Cancel"),
+      onConfirm: () => console.log("Confirmed"),
+    });
   return (
     <Card
       key={id}
@@ -38,7 +54,9 @@ export const NoteCard = ({
       style={{
         background: "#111111",
         borderColor: "#1A202A",
+        cursor: "pointer",
       }}
+      onClick={onClickCard}
       {...rest}
     >
       <Stack>
@@ -55,7 +73,16 @@ export const NoteCard = ({
             {title}
           </Title>
           <Group gap={8}>
-            <ActionIcon variant="subtle" size="sm" radius="sm" color="#7F3232">
+            <ActionIcon
+              variant="subtle"
+              size="sm"
+              radius="sm"
+              color="#7F3232"
+              onClick={(e) => {
+                e.stopPropagation();
+                openedDeleteModal();
+              }}
+            >
               <IconTrash size={16} />
             </ActionIcon>
             <ActionIcon variant="light" size="sm" radius="sm" color="yellow">
