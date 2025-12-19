@@ -10,12 +10,13 @@ import {
   ActionIcon,
   SimpleGrid,
 } from "@mantine/core";
-import { useHeadroom } from "@mantine/hooks";
+import { useDisclosure, useHeadroom } from "@mantine/hooks";
 import { IconChecklist, IconPlus } from "@tabler/icons-react";
 import { useEffect, useState } from "react";
 
 import { getTodos, Todo } from "@/api/todoApi";
 import { TodoCard } from "@/components/TodoCard";
+import { CreateTodoModal } from "@/components/CreateTodoModal";
 
 export default function Home() {
   const pinned = useHeadroom({ fixedAt: 120 });
@@ -36,10 +37,11 @@ export default function Home() {
 
   const handleCompletedChange = (id: number, completed: boolean) =>
     setTodos((todos) =>
-      todos.map((todo) =>
-        todo.id === id ? { ...todo, completed } : todo
-      )
+      todos.map((todo) => (todo.id === id ? { ...todo, completed } : todo))
     );
+
+  const [openedCreateTodo, { open: openCreateTodo, close: closeCreateTodo }] =
+    useDisclosure(false);
 
   return (
     <AppShell
@@ -69,7 +71,12 @@ export default function Home() {
               <Title order={1} c="white">
                 My Todos
               </Title>
-              <ActionIcon bg="yellow.5" radius="lg" size="lg">
+              <ActionIcon
+                bg="yellow.5"
+                radius="lg"
+                size="lg"
+                onClick={openCreateTodo}
+              >
                 <IconPlus size={24} color="#111111" />
               </ActionIcon>
             </Group>
@@ -89,6 +96,11 @@ export default function Home() {
                 />
               ))}
             </SimpleGrid>
+
+            <CreateTodoModal
+              opened={openedCreateTodo}
+              onClose={closeCreateTodo}
+            />
           </Stack>
         </Container>
       </AppShell.Main>

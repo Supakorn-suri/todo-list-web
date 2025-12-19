@@ -12,6 +12,8 @@ import { IconTrash, IconEdit, IconCircleFilled } from "@tabler/icons-react";
 import { modals } from "@mantine/modals";
 
 import { Todo } from "@/api/todoApi";
+import { EditTodoModal } from "./EditTodoModal";
+import { useDisclosure } from "@mantine/hooks";
 
 interface TodoCardProps extends CardProps {
   todo: Todo;
@@ -26,7 +28,8 @@ export const TodoCard = ({
   ...rest
 }: TodoCardProps) => {
   const { id, title, content, completed } = todo;
-
+  const [openedEditModal, { open: openEditModal, close: closeEditModal }] =
+    useDisclosure(false);
   const openedDeleteModal = () =>
     modals.openConfirmModal({
       size: "md",
@@ -39,9 +42,10 @@ export const TodoCard = ({
       labels: { confirm: "Confirm", cancel: "Cancel" },
       confirmProps: { color: "red" },
       cancelProps: { color: "gray", variant: "outline" },
-      onCancel: () => console.log("Cancel"),
-      onConfirm: () => console.log("Confirmed"),
+      onCancel: () => modals.closeAll,
+      onConfirm: () => modals.closeAll,
     });
+
   return (
     <Card
       key={id}
@@ -85,7 +89,16 @@ export const TodoCard = ({
             >
               <IconTrash size={16} />
             </ActionIcon>
-            <ActionIcon variant="light" size="sm" radius="sm" color="yellow">
+            <ActionIcon
+              variant="light"
+              size="sm"
+              radius="sm"
+              color="yellow"
+              onClick={(e) => {
+                e.stopPropagation();
+                openEditModal();
+              }}
+            >
               <IconEdit size={16} />
             </ActionIcon>
           </Group>
@@ -114,6 +127,12 @@ export const TodoCard = ({
             </Group>
           </Chip>
         </Group>
+
+        <EditTodoModal
+          todo={todo}
+          opened={openedEditModal}
+          onClose={closeEditModal}
+        />
       </Stack>
     </Card>
   );

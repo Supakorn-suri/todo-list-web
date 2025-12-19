@@ -1,3 +1,5 @@
+"use client";
+
 import {
   Modal,
   Stack,
@@ -7,26 +9,64 @@ import {
   Button,
   ModalBaseProps,
 } from "@mantine/core";
+import { useForm } from "@mantine/form";
 
 export const CreateTodoModal = ({
   opened,
   onClose,
   ...rest
 }: ModalBaseProps) => {
+  const form = useForm({
+    initialValues: {
+      title: "",
+      content: "",
+    },
+
+    validate: {
+      title: (value) =>
+        value.trim().length === 0 ? "Title is required" : null,
+    },
+  });
+
+  const handleSubmit = async (values: typeof form.values) => {
+    // TODO : create todo context + toast
+    console.log(values);
+
+    form.reset();
+    onClose();
+  };
+
   return (
     <Modal opened={opened} onClose={onClose} title="Create Todo" {...rest}>
-      <Stack gap={16}>
-        <TextInput label="Title" placeholder="Title" />
-        <Textarea label="Content" placeholder="Content" /> 
-        <Group justify="flex-end" mt="md">
-          <Button radius="md" variant="outline" color='red'>
-            Cancel
-          </Button>
-          <Button type="submit" radius="md" color='teal'>
-            Create
-          </Button>
-        </Group>
-      </Stack>
+      <form onSubmit={form.onSubmit(handleSubmit)}>
+        <Stack gap={16}>
+          <TextInput
+            label="Title"
+            placeholder="Title"
+            {...form.getInputProps("title")}
+          />
+          <Textarea
+            label="Content"
+            placeholder="Content"
+            autosize
+            minRows={3}
+            {...form.getInputProps("content")}
+          />
+          <Group justify="flex-end" mt="md">
+            <Button radius="md" variant="outline" color="red" onClick={onClose}>
+              Cancel
+            </Button>
+            <Button
+              type="submit"
+              radius="md"
+              color="teal"
+              disabled={!form.isValid()}
+            >
+              Confirm
+            </Button>
+          </Group>
+        </Stack>
+      </form>
     </Modal>
   );
 };

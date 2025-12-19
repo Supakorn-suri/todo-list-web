@@ -46,6 +46,32 @@ const theme = createTheme({
         },
       },
     },
+    TextInput: {
+      styles: {
+        label: {
+          color: "white",
+        },
+        input: {
+          marginTop: "8px",
+          backgroundColor: "#1C1C1C",
+          borderColor: "#1A202A",
+          color: "white",
+        },
+      },
+    },
+    Textarea: {
+      styles: {
+        label: {
+          color: "white",
+        },
+        input: {
+          marginTop: "8px",
+          backgroundColor: "#1C1C1C",
+          borderColor: "#1A202A",
+          color: "white",
+        },
+      },
+    },
   },
 });
 
