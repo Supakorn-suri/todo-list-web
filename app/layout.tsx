@@ -4,6 +4,8 @@ import { createTheme, MantineProvider } from "@mantine/core";
 import { ModalsProvider } from "@mantine/modals";
 import "@mantine/core/styles.css";
 
+import { TodoProvider } from "@/context/TodoContext";
+
 const geistSans = Geist({
   variable: "--font-geist-sans",
   subsets: ["latin"],
@@ -84,7 +86,9 @@ export default function RootLayout({
     <html lang="en">
       <body className={`${geistSans.variable} ${geistMono.variable}`}>
         <MantineProvider theme={theme}>
-          <ModalsProvider>{children}</ModalsProvider>
+          <ModalsProvider>
+            <TodoProvider>{children}</TodoProvider>
+          </ModalsProvider>
         </MantineProvider>
       </body>
     </html>

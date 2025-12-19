@@ -9,36 +9,18 @@ import {
   AppShell,
   ActionIcon,
   SimpleGrid,
+  Loader,
 } from "@mantine/core";
 import { useDisclosure, useHeadroom } from "@mantine/hooks";
 import { IconChecklist, IconPlus } from "@tabler/icons-react";
-import { useEffect, useState } from "react";
 
-import { getTodos, Todo } from "@/api/todoApi";
 import { TodoCard } from "@/components/TodoCard";
 import { CreateTodoModal } from "@/components/CreateTodoModal";
+import { useTodos } from "@/context/TodoContext";
 
 export default function Home() {
   const pinned = useHeadroom({ fixedAt: 120 });
-  const [todos, setTodos] = useState<Todo[]>([]);
-
-  useEffect(() => {
-    const fetchTodos = async () => {
-      try {
-        const todoData = await getTodos();
-        setTodos(todoData);
-      } catch (error) {
-        console.error("Failed to fetch todos:", error);
-      }
-    };
-
-    fetchTodos();
-  }, []);
-
-  const handleCompletedChange = (id: number, completed: boolean) =>
-    setTodos((todos) =>
-      todos.map((todo) => (todo.id === id ? { ...todo, completed } : todo))
-    );
+  const { todos, loading } = useTodos();
 
   const [openedCreateTodo, { open: openCreateTodo, close: closeCreateTodo }] =
     useDisclosure(false);
@@ -80,23 +62,23 @@ export default function Home() {
                 <IconPlus size={24} color="#111111" />
               </ActionIcon>
             </Group>
+            {loading ? (
+              <Group justify="center" py="xl">
+                <Loader color="yellow.5" size="lg" />
+              </Group>
+            ) : (
+              <>
+                <Text fw={600} c="#9DA2AD">
+                  {todos.length} Todos
+                </Text>
 
-            <Text fw={600} c="#9DA2AD">
-              {todos.length} Todos
-            </Text>
-
-            <SimpleGrid cols={{ base: 1, sm: 2, md: 3 }}>
-              {todos.map((todo) => (
-                <TodoCard
-                  key={todo.id}
-                  todo={todo}
-                  onCompletedChange={(checked) =>
-                    handleCompletedChange(todo.id, checked)
-                  }
-                />
-              ))}
-            </SimpleGrid>
-
+                <SimpleGrid cols={{ base: 1, sm: 2, md: 3 }}>
+                  {todos.map((todo) => (
+                    <TodoCard key={todo.id} todo={todo} /> // TODO: handle toggle with update api
+                  ))}
+                </SimpleGrid>
+              </>
+            )}
             <CreateTodoModal
               opened={openedCreateTodo}
               onClose={closeCreateTodo}

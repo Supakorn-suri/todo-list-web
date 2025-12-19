@@ -13,7 +13,7 @@ const api = axios.create({
   timeout: 5000,
 });
 
-export const getTodos = async (): Promise<Todo[]> => {
+export const getTodosApi = async (): Promise<Todo[]> => {
   const res = await api.get<Todo[]>("/todos");
   return res.data;
 };
