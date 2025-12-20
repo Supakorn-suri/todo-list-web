@@ -1,36 +1,47 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Todo List Web
+
+A simple Todo web application built with Next.js (App Router) and Mantine UI.
+
+## Features
+- CRUD operations for Todos using React Context
+- Mock API at `/app/api/todos/route.ts` with simulated network delay
+- Responsive UI with loading skeletons and empty state
+- Simulated error scenarios for creating Todos
+- User notifications for success and error states
+
+## Requirements
+- Node.js 20.9 or later (LTS)
+
+This project is built with Next.js (App Router).  
+The Node.js requirement follows the official
+[Next.js documentation](https://nextjs.org/docs/app/getting-started/installation).
 
 ## Getting Started
 
-First, run the development server:
-
+1. Clone the repo
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+git clone https://github.com/Supakorn-suri/todo-list-web.git
+cd "todo-list-web"
 ```
+2. Install dependencies
+```bash
+yarn install
+```
+> This project is primarily developed using Yarn (Plug'n'Play), but npm and pnpm are also supported.
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+3. (If using Yarn PnP) Configure VS Code TypeScript SDK
+   Yarn PnP removes `node_modules` and uses a virtual filesystem. To make VS Code work with the PnP TypeScript SDK:
+```bash
+yarn dlx @yarnpkg/sdks vscode
+```
+> This sets `.vscode/settings.json` to use `.yarn/sdks/typescript/lib/tsserver.js`.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
-
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
-
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+4. Run dev server
+```bash
+   yarn dev
+   # or
+   npm run dev
+   # or
+   pnpm dev
+   ```
+5. Open http://localhost:3000
