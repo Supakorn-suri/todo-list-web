@@ -40,5 +40,7 @@ const todos = [
 ];
 
 export async function GET() {
+  // simulate network delay
+  await new Promise((resolve) => setTimeout(resolve, 2000));
   return NextResponse.json(todos);
 }
