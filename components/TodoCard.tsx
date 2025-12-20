@@ -11,6 +11,7 @@ import {
 import { IconTrash, IconEdit, IconCircleFilled } from "@tabler/icons-react";
 import { modals } from "@mantine/modals";
 import { useDisclosure } from "@mantine/hooks";
+import { notifications } from "@mantine/notifications";
 
 import { Todo } from "@/api/todoApi";
 import { useTodos } from "@/context/TodoContext";
@@ -43,6 +44,11 @@ export const TodoCard = ({ todo, onClickCard, ...rest }: TodoCardProps) => {
       onConfirm: () => {
         deleteTodo(id);
         modals.closeAll();
+        notifications.show({
+          title: "Deleted successfully",
+          message: undefined,
+          color: "teal",
+        });
       },
     });
 

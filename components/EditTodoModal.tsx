@@ -1,3 +1,5 @@
+"use client";
+
 import {
   Modal,
   Stack,
@@ -10,6 +12,7 @@ import {
 import { useForm } from "@mantine/form";
 import { modals } from "@mantine/modals";
 import { useEffect } from "react";
+import { notifications } from "@mantine/notifications";
 
 import { Todo } from "@/api/todoApi";
 import { useTodos } from "@/context/TodoContext";
@@ -52,6 +55,12 @@ export const EditTodoModal = ({
     updateTodo(todo.id, values.title, values.content);
 
     onClose();
+
+    notifications.show({
+      title: "Updated successfully",
+      message: undefined,
+      color: "teal",
+    });
   };
 
   return (
@@ -85,7 +94,7 @@ export const EditTodoModal = ({
               color="teal"
               disabled={!form.isValid()}
             >
-              Create
+              Confirm
             </Button>
           </Group>
         </Stack>

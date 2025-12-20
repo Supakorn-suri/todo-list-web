@@ -10,6 +10,7 @@ import {
   ModalBaseProps,
 } from "@mantine/core";
 import { useForm } from "@mantine/form";
+import { notifications } from "@mantine/notifications";
 
 import { useTodos } from "@/context/TodoContext";
 
@@ -34,6 +35,12 @@ export const CreateTodoModal = ({
 
   const handleSubmit = async (values: typeof form.values) => {
     addTodo(values.title, values.content);
+
+    notifications.show({
+      title: "Created successfully",
+      message: undefined,
+      color: "teal",
+    });
 
     form.reset();
     onClose();

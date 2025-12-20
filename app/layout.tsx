@@ -2,7 +2,9 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import { createTheme, MantineProvider } from "@mantine/core";
 import { ModalsProvider } from "@mantine/modals";
+import { Notifications } from "@mantine/notifications";
 import "@mantine/core/styles.css";
+import "@mantine/notifications/styles.css";
 
 import { TodoProvider } from "@/context/TodoContext";
 
@@ -85,8 +87,9 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={`${geistSans.variable} ${geistMono.variable}`}>
-        <MantineProvider theme={theme}>
+        <MantineProvider theme={theme} defaultColorScheme="dark">
           <ModalsProvider>
+            <Notifications position="top-center" />
             <TodoProvider>{children}</TodoProvider>
           </ModalsProvider>
         </MantineProvider>
