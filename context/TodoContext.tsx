@@ -9,7 +9,13 @@ export interface TodoContextType {
   loading: boolean;
   error: string | null;
   getTodos: () => Promise<void>;
-  addTodo: (title: string, content: string) => void;
+  addTodo: (
+    title: string,
+    content: string
+  ) => {
+    success: boolean;
+    error?: string;
+  };
   updateTodo: (id: number, title: string, content: string) => void;
   deleteTodo: (id: number) => void;
   toggleTodo: (id: number) => void;
@@ -21,7 +27,7 @@ export const TodoContext = createContext<TodoContextType | undefined>(
 
 export const TodoProvider = ({ children }: { children: React.ReactNode }) => {
   const [todos, setTodos] = useState<Todo[]>([]);
-  const [loading, setLoading] = useState<boolean>(false);
+  const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
   const nextId = useRef(6); // id start after mock data (5 items)
 
@@ -39,7 +45,19 @@ export const TodoProvider = ({ children }: { children: React.ReactNode }) => {
     }
   };
 
-  const addTodo = (title: string, content: string) => {
+  const MOCK_CREATE_ERROR_RATE = 0.3;
+
+  const addTodo = (
+    title: string,
+    content: string
+  ): {
+    success: boolean;
+    error?: string;
+  } => {
+    if (Math.random() < MOCK_CREATE_ERROR_RATE) {
+      return { success: false, error: "Failed to create todo" };
+    }
+
     const newTodo: Todo = {
       id: nextId.current++,
       title,
@@ -48,6 +66,8 @@ export const TodoProvider = ({ children }: { children: React.ReactNode }) => {
     };
 
     setTodos((prev) => [...prev, newTodo]);
+
+    return { success: true };
   };
 
   const updateTodo = (id: number, title: string, content: string) => {

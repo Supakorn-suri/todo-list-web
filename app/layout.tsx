@@ -89,7 +89,7 @@ export default function RootLayout({
       <body className={`${geistSans.variable} ${geistMono.variable}`}>
         <MantineProvider theme={theme} defaultColorScheme="dark">
           <ModalsProvider>
-            <Notifications position="top-center" />
+            <Notifications position="top-center" autoClose={2000} />
             <TodoProvider>{children}</TodoProvider>
           </ModalsProvider>
         </MantineProvider>

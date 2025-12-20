@@ -9,7 +9,6 @@ import {
   AppShell,
   ActionIcon,
   SimpleGrid,
-  Skeleton,
 } from "@mantine/core";
 import { useDisclosure, useHeadroom } from "@mantine/hooks";
 import { IconChecklist, IconPlus } from "@tabler/icons-react";
@@ -18,13 +17,25 @@ import { TodoCard } from "@/components/TodoCard";
 import { CreateTodoModal } from "@/components/CreateTodoModal";
 import { SkeletonCard } from "@/components/SkeletonCard";
 import { useTodos } from "@/context/TodoContext";
+import { notifications } from "@mantine/notifications";
+import { useEffect } from "react";
 
 export default function Home() {
   const pinned = useHeadroom({ fixedAt: 120 });
-  const { todos, loading } = useTodos();
+  const { todos, loading, error } = useTodos();
 
   const [openedCreateTodo, { open: openCreateTodo, close: closeCreateTodo }] =
     useDisclosure(false);
+
+  useEffect(() => {
+    if (error) {
+      notifications.show({
+        title: error || "Something went wrong",
+        message: undefined,
+        color: "red",
+      });
+    }
+  }, [error]);
 
   return (
     <AppShell
@@ -63,19 +74,27 @@ export default function Home() {
                 <IconPlus size={24} color="#111111" />
               </ActionIcon>
             </Group>
-            {todos.length > 0 ? (
-              <Text fw={600} c="#9DA2AD">
-                {todos.length} Todos
-              </Text>
-            ) : (
-              <Skeleton height={16} width={80} mt={4} />
-            )}
+
+            <Text fw={600} c="#9DA2AD">
+              {todos.length} Todos{" "}
+            </Text>
+
             {loading ? (
               <SimpleGrid cols={{ base: 1, sm: 2, md: 3 }}>
                 {[1, 2, 3].map((i) => (
                   <SkeletonCard key={i} />
                 ))}
               </SimpleGrid>
+            ) : todos.length === 0 ? (
+              <Stack align="center" gap="sm" py="xl">
+                <IconChecklist size={48} color="#9DA2AD" />
+                <Text fw={600} c="#9DA2AD">
+                  You have nothing to do
+                </Text>
+                <Text size="sm" c="dimmed">
+                  Create your first todo to get started
+                </Text>
+              </Stack>
             ) : (
               <SimpleGrid cols={{ base: 1, sm: 2, md: 3 }}>
                 {todos.map((todo) => (
@@ -83,6 +102,7 @@ export default function Home() {
                 ))}
               </SimpleGrid>
             )}
+
             <CreateTodoModal
               opened={openedCreateTodo}
               onClose={closeCreateTodo}

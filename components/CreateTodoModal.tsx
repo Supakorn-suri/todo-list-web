@@ -33,13 +33,16 @@ export const CreateTodoModal = ({
     },
   });
 
-  const handleSubmit = async (values: typeof form.values) => {
-    addTodo(values.title, values.content);
+  const handleSubmit = (values: typeof form.values) => {
+    const res = addTodo(values.title, values.content);
 
     notifications.show({
-      title: "Created successfully",
+      title: res.success
+        ? "Created successfully"
+        : res.error ?? "Something went wrong",
       message: undefined,
-      color: "teal",
+
+      color: res.success ? "teal" : "red",
     });
 
     form.reset();
