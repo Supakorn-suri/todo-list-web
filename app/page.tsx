@@ -27,7 +27,7 @@ export default function Home() {
 
   return (
     <AppShell
-      bg="black"
+      bg="#171717"
       header={{ height: 60, collapsed: !pinned, offset: false }}
       padding="md"
     >
@@ -74,7 +74,7 @@ export default function Home() {
 
                 <SimpleGrid cols={{ base: 1, sm: 2, md: 3 }}>
                   {todos.map((todo) => (
-                    <TodoCard key={todo.id} todo={todo} /> // TODO: handle toggle with update api
+                    <TodoCard key={todo.id} todo={todo} />
                   ))}
                 </SimpleGrid>
               </>

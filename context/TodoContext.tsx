@@ -1,6 +1,6 @@
 "use client";
 
-import { createContext, useContext, useEffect, useState } from "react";
+import { createContext, useContext, useEffect, useRef, useState } from "react";
 
 import { getTodosApi, Todo } from "@/api/todoApi";
 
@@ -9,7 +9,10 @@ export interface TodoContextType {
   loading: boolean;
   error: string | null;
   getTodos: () => Promise<void>;
-  // add, edit, del
+  addTodo: (title: string, content: string) => void;
+  updateTodo: (id: number, title: string, content: string) => void;
+  deleteTodo: (id: number) => void;
+  toggleTodo: (id: number) => void;
 }
 
 export const TodoContext = createContext<TodoContextType | undefined>(
@@ -20,6 +23,7 @@ export const TodoProvider = ({ children }: { children: React.ReactNode }) => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
+  const nextId = useRef(6); // id start after mock data (5 items)
 
   const getTodos = async () => {
     setLoading(true);
@@ -35,6 +39,35 @@ export const TodoProvider = ({ children }: { children: React.ReactNode }) => {
     }
   };
 
+  const addTodo = (title: string, content: string) => {
+    const newTodo: Todo = {
+      id: nextId.current++,
+      title,
+      content,
+      completed: false,
+    };
+
+    setTodos((prev) => [...prev, newTodo]);
+  };
+
+  const updateTodo = (id: number, title: string, content: string) => {
+    setTodos((prev) =>
+      prev.map((todo) => (todo.id === id ? { ...todo, title, content } : todo))
+    );
+  };
+
+  const deleteTodo = (id: number) => {
+    setTodos((prev) => prev.filter((todo) => todo.id !== id));
+  };
+
+  const toggleTodo = (id: number) => {
+    setTodos((prev) =>
+      prev.map((todo) =>
+        todo.id === id ? { ...todo, completed: !todo.completed } : todo
+      )
+    );
+  };
+
   useEffect(() => {
     getTodos();
   }, []);
@@ -46,6 +79,10 @@ export const TodoProvider = ({ children }: { children: React.ReactNode }) => {
         loading,
         error,
         getTodos,
+        addTodo,
+        updateTodo,
+        deleteTodo,
+        toggleTodo,
       }}
     >
       {children}

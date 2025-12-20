@@ -10,24 +10,21 @@ import {
 } from "@mantine/core";
 import { IconTrash, IconEdit, IconCircleFilled } from "@tabler/icons-react";
 import { modals } from "@mantine/modals";
+import { useDisclosure } from "@mantine/hooks";
 
 import { Todo } from "@/api/todoApi";
+import { useTodos } from "@/context/TodoContext";
 import { EditTodoModal } from "./EditTodoModal";
-import { useDisclosure } from "@mantine/hooks";
 
 interface TodoCardProps extends CardProps {
   todo: Todo;
-  onCompletedChange?: (checked: boolean) => void;
   onClickCard?: () => void;
 }
 
-export const TodoCard = ({
-  todo,
-  onCompletedChange,
-  onClickCard,
-  ...rest
-}: TodoCardProps) => {
+export const TodoCard = ({ todo, onClickCard, ...rest }: TodoCardProps) => {
   const { id, title, content, completed } = todo;
+  const { deleteTodo, toggleTodo } = useTodos();
+
   const [openedEditModal, { open: openEditModal, close: closeEditModal }] =
     useDisclosure(false);
   const openedDeleteModal = () =>
@@ -43,7 +40,10 @@ export const TodoCard = ({
       confirmProps: { color: "red" },
       cancelProps: { color: "gray", variant: "outline" },
       onCancel: () => modals.closeAll,
-      onConfirm: () => modals.closeAll,
+      onConfirm: () => {
+        deleteTodo(id);
+        modals.closeAll();
+      },
     });
 
   return (
@@ -110,7 +110,9 @@ export const TodoCard = ({
         <Group justify="flex-end">
           <Chip
             checked={completed}
-            onChange={(checked) => onCompletedChange?.(checked)}
+            onChange={() => {
+              toggleTodo(id);
+            }}
             variant="light"
             color={completed ? "teal" : "gray"}
             styles={{

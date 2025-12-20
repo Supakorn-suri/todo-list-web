@@ -1,4 +1,3 @@
-import { Todo } from "@/api/todoApi";
 import {
   Modal,
   Stack,
@@ -12,6 +11,9 @@ import { useForm } from "@mantine/form";
 import { modals } from "@mantine/modals";
 import { useEffect } from "react";
 
+import { Todo } from "@/api/todoApi";
+import { useTodos } from "@/context/TodoContext";
+
 interface EditTodoModalProp extends ModalBaseProps {
   todo: Todo;
 }
@@ -22,6 +24,8 @@ export const EditTodoModal = ({
   onClose,
   ...rest
 }: EditTodoModalProp) => {
+  const { updateTodo } = useTodos();
+
   const form = useForm({
     initialValues: {
       title: todo?.title ?? "",
@@ -45,12 +49,7 @@ export const EditTodoModal = ({
   const handleSubmit = async (values: typeof form.values) => {
     if (!todo) return;
 
-    // TODO : update todo context + toast
-    console.log({
-      ...todo,
-      title: values.title.trim(),
-      content: values.content.trim(),
-    });
+    updateTodo(todo.id, values.title, values.content);
 
     onClose();
   };

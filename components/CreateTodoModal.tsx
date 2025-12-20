@@ -11,11 +11,15 @@ import {
 } from "@mantine/core";
 import { useForm } from "@mantine/form";
 
+import { useTodos } from "@/context/TodoContext";
+
 export const CreateTodoModal = ({
   opened,
   onClose,
   ...rest
 }: ModalBaseProps) => {
+  const { addTodo } = useTodos();
+
   const form = useForm({
     initialValues: {
       title: "",
@@ -29,8 +33,7 @@ export const CreateTodoModal = ({
   });
 
   const handleSubmit = async (values: typeof form.values) => {
-    // TODO : create todo context + toast
-    console.log(values);
+    addTodo(values.title, values.content);
 
     form.reset();
     onClose();
