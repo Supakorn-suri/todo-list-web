@@ -45,3 +45,10 @@ yarn dlx @yarnpkg/sdks vscode
    pnpm dev
    ```
 5. Open http://localhost:3000
+
+## Demo Video
+https://drive.google.com/file/d/1-GM7cNQfK73hvpDkUrlYONKcvcUqz7fN/view?usp=sharing
+
+### Live Preview
+You can check the live UI preview here: [Preview Link](https://jam.dev/c/c3df9ea2-4f41-4c9b-868e-7790869da705)
+
