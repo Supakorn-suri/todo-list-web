@@ -12,6 +12,9 @@ const eslintConfig = defineConfig([
     "out/**",
     "build/**",
     "next-env.d.ts",
+    // Prevent ESLint from linting Yarn PnP files
+    ".yarn/**",
+    ".pnp.cjs",
   ]),
 ]);
 
