@@ -47,6 +47,7 @@ export const EditTodoModal = ({
         content: todo.content,
       });
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [todo]);
 
   const handleSubmit = async (values: typeof form.values) => {
